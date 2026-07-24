@@ -21,7 +21,7 @@ class ProcessPaymentUseCase(ProcessPayment):
         self.payment_notifier = payment_notifier
         self._payment_processors = payment_processors
 
-    def process(self, command: ProcessPaymentCommand) -> Payment:
+    def execute(self, command: ProcessPaymentCommand) -> Payment:
         self._payment_validator.validate(command)
 
         payment = Payment(

@@ -39,7 +39,7 @@ def health_check() -> dict[str, str]:
           status_code=status.HTTP_201_CREATED)
 def process_payment(request: PaymentRequest) -> PaymentResponse:
     try:
-        payment = process_payment_usecase.process(request.to_command())
+        payment = process_payment_usecase.execute(request.to_command())
         return PaymentResponse.from_payment(payment)
     except ValueError as ex:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(ex))
@@ -50,7 +50,7 @@ def process_payment(request: PaymentRequest) -> PaymentResponse:
          status_code=status.HTTP_200_OK)
 def find_by_id_payment(payment_id: UUID) -> PaymentResponse:
     try:
-        payment = get_payment_usecase.find_by_id(payment_id)
+        payment = get_payment_usecase.execute(payment_id)
         return PaymentResponse.from_payment(payment)
     except KeyError as ex:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(ex))

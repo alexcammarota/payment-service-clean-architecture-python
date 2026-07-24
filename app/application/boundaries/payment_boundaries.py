@@ -8,11 +8,11 @@ from app.domain.payment import Payment
 
 class ProcessPayment(Protocol):
     @abstractmethod
-    def process(self, command: ProcessPaymentCommand) -> Payment:
+    def execute(self, command: ProcessPaymentCommand) -> Payment:
         ...
 
 
 class GetPayment(Protocol):
     @abstractmethod
-    def find_by_id(self, payment_id: UUID) -> Payment:
+    def execute(self, payment_id: UUID) -> Payment:
         ...

@@ -10,10 +10,10 @@ class GetPaymentUseCase(GetPayment):
     def __init__(self, payment_repository: PaymentRepository):
         self._payment_repository = payment_repository
 
-    def find_by_id(self, payment_id: UUID) -> Payment:
+    def execute(self, payment_id: UUID) -> Payment:
         payment = self._payment_repository.find_by_id(payment_id)
 
         if payment is None:
-            raise KeyError(f"Payment not Found {payment_id}")
+            raise KeyError(f"Payment not found {payment_id}")
 
         return payment

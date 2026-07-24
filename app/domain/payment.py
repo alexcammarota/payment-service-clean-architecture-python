@@ -4,7 +4,6 @@ from enum import StrEnum
 from uuid import UUID
 
 from _decimal import Decimal
-from pydantic import BaseModel, Field
 
 
 class PaymentMethod(StrEnum):

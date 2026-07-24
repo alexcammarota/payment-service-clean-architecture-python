@@ -9,7 +9,7 @@ class PixPaymentProcessor:
         payment.status = PaymentStatus.APPROVED
 
 
-class CreditCardProcessor:
+class CreditCardPaymentProcessor:
     def supports(self, payment_method: PaymentMethod) -> bool:
         return payment_method == PaymentMethod.CREDIT_CARD
 
@@ -17,7 +17,7 @@ class CreditCardProcessor:
         payment.status = PaymentStatus.APPROVED
 
 
-class BankingTransferProcessor:
+class BankTransferPaymentProcessor:
     def supports(self, payment_method: PaymentMethod) -> bool:
         return payment_method == PaymentMethod.BANK_TRANSFER
 

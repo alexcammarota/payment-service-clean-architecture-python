@@ -5,7 +5,7 @@ from starlette import status
 
 from app.payment_models import PaymentRequest, PaymentResponse
 from app.payment_notification_service import PaymentNotificationService
-from app.payment_processors import PixPaymentProcessor, CreditCardProcessor, BankingTransferProcessor
+from app.payment_processors import PixPaymentProcessor, CreditCardPaymentProcessor, BankTransferPaymentProcessor
 from app.payment_repository import PaymentRepository
 from app.payment_service import PaymentService
 from app.payment_validator import PaymentValidator
@@ -16,8 +16,8 @@ app = FastAPI(title="Payment Service",
 payment_service = PaymentService(payment_validator=PaymentValidator(),
                                  payment_repository=PaymentRepository(),
                                  payment_notification_service=PaymentNotificationService(),
-                                 payment_processors=[PixPaymentProcessor(), CreditCardProcessor(),
-                                                     BankingTransferProcessor()])
+                                 payment_processors=[PixPaymentProcessor(), CreditCardPaymentProcessor(),
+                                                     BankTransferPaymentProcessor()])
 
 
 @app.get("/healthcheck")

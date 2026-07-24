@@ -1,17 +1,23 @@
 import uuid
 from datetime import datetime, UTC
-from decimal import Decimal
 from uuid import UUID
 
 from app.payment_models import Payment, PaymentRequest, PaymentStatus, PaymentMethod
+from app.payment_notification_service import PaymentNotificationService
+from app.payment_repository import PaymentRepository
+from app.payment_validator import PaymentValidator
 
 
 class PaymentService:
-    def __init__(self) -> None:
-        self._payments: dict[UUID, Payment] = {}
+    def __init__(self, payment_validator: PaymentValidator,
+                 payment_repository: PaymentRepository,
+                 payment_notification_service: PaymentNotificationService) -> None:
+        self._payment_validator = payment_validator
+        self._payment_repository = payment_repository
+        self._payment_notification_service = payment_notification_service
 
     def process(self, request: PaymentRequest) -> Payment:
-        self._validate(request)
+        self._payment_validator.validate(request)
 
         payment = Payment(
             paymentId=uuid.uuid4(),
@@ -32,30 +38,18 @@ class PaymentService:
         else:
             payment.status = PaymentStatus.REJECTED
 
-        self._payments[payment.payment_id] = payment
+        self._payment_repository.save(payment)
 
-        print(
-            f"Payment notification sent: "
-            f"id={payment.payment_id}, "
-            f"status={payment.status}"
-        )
+        self._payment_notification_service.send(payment)
 
         return payment
 
     def find_by_id(self, payment_id: UUID) -> Payment:
-        payment = self._payments.get(payment_id)
+        payment = self._payment_repository.find_by_id(payment_id)
 
         if payment is None:
             raise KeyError(f"Payment not Found {payment_id}")
 
         return payment
-
-    @staticmethod
-    def _validate(request: PaymentRequest) -> None:
-        if request.amount <= Decimal("0"):
-            raise ValueError("Payment amount must be greater than zero")
-
-        if not request.currency.strip():
-            raise ValueError("Currency must be informed")
 
 

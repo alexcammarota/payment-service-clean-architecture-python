@@ -6,7 +6,7 @@ from starlette import status
 from app.payment_models import PaymentRequest, PaymentResponse
 from app.payment_notification_service import PaymentNotificationService
 from app.payment_processors import PixPaymentProcessor, CreditCardPaymentProcessor, BankTransferPaymentProcessor
-from app.payment_repository import PaymentRepository
+from app.payment_repository import PaymentRepository, InMemoryPaymentRepository
 from app.payment_service import PaymentService
 from app.payment_validator import PaymentValidator
 
@@ -14,7 +14,7 @@ app = FastAPI(title="Payment Service",
               version="0.1.0")
 
 payment_service = PaymentService(payment_validator=PaymentValidator(),
-                                 payment_repository=PaymentRepository(),
+                                 payment_repository=InMemoryPaymentRepository(),
                                  payment_notification_service=PaymentNotificationService(),
                                  payment_processors=[PixPaymentProcessor(), CreditCardPaymentProcessor(),
                                                      BankTransferPaymentProcessor()])

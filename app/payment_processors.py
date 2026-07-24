@@ -1,7 +1,17 @@
+from typing import Protocol
+
 from app.payment_models import PaymentMethod, Payment, PaymentStatus
 
 
-class PixPaymentProcessor:
+class PaymentProcessor(Protocol):
+    def supports(self, payment_method: PaymentMethod) -> bool:
+        ...
+
+    def process(self, payment: Payment) -> None:
+        ...
+
+
+class PixPaymentProcessor(PaymentProcessor):
     def supports(self, payment_method: PaymentMethod) -> bool:
         return payment_method == PaymentMethod.PIX
 
@@ -9,7 +19,7 @@ class PixPaymentProcessor:
         payment.status = PaymentStatus.APPROVED
 
 
-class CreditCardPaymentProcessor:
+class CreditCardPaymentProcessor(PaymentProcessor):
     def supports(self, payment_method: PaymentMethod) -> bool:
         return payment_method == PaymentMethod.CREDIT_CARD
 
@@ -17,7 +27,7 @@ class CreditCardPaymentProcessor:
         payment.status = PaymentStatus.APPROVED
 
 
-class BankTransferPaymentProcessor:
+class BankTransferPaymentProcessor(PaymentProcessor):
     def supports(self, payment_method: PaymentMethod) -> bool:
         return payment_method == PaymentMethod.BANK_TRANSFER
 

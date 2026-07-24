@@ -2,9 +2,9 @@ import uuid
 from datetime import datetime, UTC
 from uuid import UUID
 
-from app.payment_models import Payment, PaymentRequest, PaymentStatus, PaymentMethod
-from app.payment_notification_service import PaymentNotificationService
-from app.payment_processor import PaymentProcessor
+from app.payment_models import Payment, PaymentRequest, PaymentStatus
+from app.payment_notification_service import PaymentNotifier
+from app.payment_processors import PaymentProcessor
 from app.payment_repository import PaymentRepository
 from app.payment_validator import PaymentValidator
 
@@ -12,7 +12,7 @@ from app.payment_validator import PaymentValidator
 class PaymentService:
     def __init__(self, payment_validator: PaymentValidator,
                  payment_repository: PaymentRepository,
-                 payment_notification_service: PaymentNotificationService,
+                 payment_notification_service: PaymentNotifier,
                  payment_processors: list[PaymentProcessor]) -> None:
         self._payment_validator = payment_validator
         self._payment_repository = payment_repository

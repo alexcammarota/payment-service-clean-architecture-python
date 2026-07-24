@@ -4,6 +4,7 @@ from uuid import UUID
 
 from app.payment_models import Payment, PaymentRequest, PaymentStatus, PaymentMethod
 from app.payment_notification_service import PaymentNotificationService
+from app.payment_processor import PaymentProcessor
 from app.payment_repository import PaymentRepository
 from app.payment_validator import PaymentValidator
 
@@ -11,10 +12,12 @@ from app.payment_validator import PaymentValidator
 class PaymentService:
     def __init__(self, payment_validator: PaymentValidator,
                  payment_repository: PaymentRepository,
-                 payment_notification_service: PaymentNotificationService) -> None:
+                 payment_notification_service: PaymentNotificationService,
+                 payment_processors: list[PaymentProcessor]) -> None:
         self._payment_validator = payment_validator
         self._payment_repository = payment_repository
         self._payment_notification_service = payment_notification_service
+        self._payment_processors = payment_processors
 
     def process(self, request: PaymentRequest) -> Payment:
         self._payment_validator.validate(request)
@@ -29,14 +32,13 @@ class PaymentService:
             createdAt=datetime.now(UTC)
         )
 
-        if request.payment_method == PaymentMethod.PIX:
-            payment.status = PaymentStatus.APPROVED
-        elif request.payment_method == PaymentMethod.CREDIT_CARD:
-            payment.status = PaymentStatus.APPROVED
-        elif request.payment_method == PaymentMethod.BANK_TRANSFER:
-            payment.status = PaymentStatus.PENDING
-        else:
-            payment.status = PaymentStatus.REJECTED
+        processor = next((processor for processor in self._payment_processors
+                          if processor.supports(payment.payment_method)), None)
+
+        if processor is None:
+            raise ValueError(f"Unsupported Payment Method {payment.payment_method}")
+
+        processor.process(payment)
 
         self._payment_repository.save(payment)
 
@@ -51,5 +53,3 @@ class PaymentService:
             raise KeyError(f"Payment not Found {payment_id}")
 
         return payment
-
-

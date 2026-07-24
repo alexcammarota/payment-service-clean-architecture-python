@@ -1,6 +1,9 @@
 [tool.fastapi]
 entrypoint = "app.main:app"
 
+[tool.pytest.ini_options]
+pythonpath = ["."]
+
 [project]
 name = "payment-service-clean-architecture-python"
 version = "0.1.0"

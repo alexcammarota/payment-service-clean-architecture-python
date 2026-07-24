@@ -1,14 +1,5 @@
-from typing import Protocol
-
-from app.payment_models import PaymentMethod, Payment, PaymentStatus
-
-
-class PaymentProcessor(Protocol):
-    def supports(self, payment_method: PaymentMethod) -> bool:
-        ...
-
-    def process(self, payment: Payment) -> None:
-        ...
+from app.application.gateways.payment_processor import PaymentProcessor
+from app.domain.payment import PaymentMethod, PaymentStatus, Payment
 
 
 class PixPaymentProcessor(PaymentProcessor):

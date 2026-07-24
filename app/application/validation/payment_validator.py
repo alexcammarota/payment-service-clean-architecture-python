@@ -1,12 +1,12 @@
 from decimal import Decimal
 
-from app.payment_models import PaymentRequest
+from app.application.command.process_payment_command import ProcessPaymentCommand
 
 
 class PaymentValidator:
 
     @staticmethod
-    def validate(request: PaymentRequest) -> None:
+    def validate(request: ProcessPaymentCommand) -> None:
         if request.amount <= Decimal("0"):
             raise ValueError("Payment amount must be greater than zero")
 

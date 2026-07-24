@@ -1,21 +1,11 @@
 from datetime import datetime
-from decimal import Decimal
-from enum import StrEnum
 from uuid import UUID
 
+from _decimal import Decimal
 from pydantic import BaseModel, Field
 
-
-class PaymentMethod(StrEnum):
-    PIX = "PIX"
-    CREDIT_CARD = "CREDIT_CARD"
-    BANK_TRANSFER = "BANK_TRANSFER"
-
-
-class PaymentStatus(StrEnum):
-    PENDING = "PENDING"
-    APPROVED = "APPROVED"
-    REJECTED = "REJECTED"
+from app.application.command.process_payment_command import ProcessPaymentCommand
+from app.domain.payment import PaymentMethod, PaymentStatus, Payment
 
 
 class PaymentRequest(BaseModel):
@@ -24,15 +14,13 @@ class PaymentRequest(BaseModel):
     currency: str
     payment_method: PaymentMethod = Field(alias="paymentMethod")
 
-
-class Payment(BaseModel):
-    payment_id: UUID = Field(alias="paymentId")
-    customer_id: UUID = Field(alias="customerId")
-    amount: Decimal
-    currency: str
-    payment_method: PaymentMethod = Field(alias="paymentMethod")
-    status: PaymentStatus
-    created_at: datetime = Field(alias="createdAt")
+    def to_command(self) -> ProcessPaymentCommand:
+        return ProcessPaymentCommand(
+            customer_id=self.customer_id,
+            amount=self.amount,
+            currency=self.currency,
+            payment_method=self.payment_method,
+        )
 
 
 class PaymentResponse(BaseModel):

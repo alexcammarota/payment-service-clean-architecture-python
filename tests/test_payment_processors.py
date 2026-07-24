@@ -4,19 +4,20 @@ from uuid import uuid4
 
 import pytest
 
-from app.payment_models import PaymentMethod, Payment, PaymentStatus
-from app.payment_processors import PixPaymentProcessor, CreditCardPaymentProcessor, BankTransferPaymentProcessor
+from app.domain.payment import PaymentMethod, PaymentStatus, Payment
+from app.infrastructure.processors.payment_processors import PixPaymentProcessor, CreditCardPaymentProcessor, \
+    BankTransferPaymentProcessor
 
 
 def create_payment(payment_method: PaymentMethod) -> Payment:
     return Payment(
-        paymentId=uuid4(),
-        customerId=uuid4(),
+        payment_id=uuid4(),
+        customer_id=uuid4(),
         amount=Decimal("100.00"),
         currency="BRL",
-        paymentMethod=payment_method,
+        payment_method=payment_method,
         status=PaymentStatus.PENDING,
-        createdAt=datetime.now(UTC),
+        created_at=datetime.now(UTC),
     )
 
 

@@ -1,16 +1,7 @@
-from typing import Protocol
 from uuid import UUID
 
-from app.payment_models import Payment
-
-
-class PaymentRepository(Protocol):
-
-    def save(self, payment: Payment) -> Payment:
-        ...
-
-    def find_by_id(self, payment_id: UUID) -> Payment:
-        ...
+from app.application.gateways.payment_repository import PaymentRepository
+from app.domain.payment import Payment
 
 
 class InMemoryPaymentRepository(PaymentRepository):

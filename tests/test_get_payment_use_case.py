@@ -6,7 +6,7 @@ from uuid import uuid4
 import pytest
 
 from app.application.gateways.payment_repository import PaymentRepository
-from app.application.usecase.GetPaymentUseCase import GetPaymentUseCase
+from app.application.usecase.get_payment import GetPaymentUseCase
 from app.domain.payment import Payment, PaymentMethod, PaymentStatus
 
 

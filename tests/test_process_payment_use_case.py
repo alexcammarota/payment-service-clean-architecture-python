@@ -8,7 +8,7 @@ from app.application.command.process_payment_command import ProcessPaymentComman
 from app.application.gateways.payment_notifier import PaymentNotifier
 from app.application.gateways.payment_processor import PaymentProcessor
 from app.application.gateways.payment_repository import PaymentRepository
-from app.application.usecase.ProcessPaymentUseCase import ProcessPaymentUseCase
+from app.application.usecase.process_payment import ProcessPaymentUseCase
 from app.application.validation.payment_validator import PaymentValidator
 from app.domain.payment import PaymentMethod, PaymentStatus
 

@@ -4,8 +4,8 @@ from fastapi import FastAPI, HTTPException
 from starlette import status
 
 from app.application.boundaries.payment_boundaries import ProcessPayment, GetPayment
-from app.application.usecase.GetPaymentUseCase import GetPaymentUseCase
-from app.application.usecase.ProcessPaymentUseCase import ProcessPaymentUseCase
+from app.application.usecase.get_payment import GetPaymentUseCase
+from app.application.usecase.process_payment import ProcessPaymentUseCase
 from app.presentation.rest.payment_models import PaymentRequest, PaymentResponse
 from app.infrastructure.notification.console_payment_notifier import ConsolePaymentNotifier
 from app.infrastructure.processors.payment_processors import PixPaymentProcessor, CreditCardPaymentProcessor, \
